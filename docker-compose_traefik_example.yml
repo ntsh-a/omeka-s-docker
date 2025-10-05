@@ -16,7 +16,7 @@ services:
       - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
       - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
       #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myhttpchallenge.acme.email=example@example.org" #FIXME
+      - "--certificatesresolvers.myhttpchallenge.acme.email=webmaster@shevchenko.org.org"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
@@ -41,34 +41,46 @@ services:
     networks:
       - network1
     volumes:
-      - omekas_db:/var/lib/mysql
+      - omeka_db:/var/lib/mysql:Z
     environment:
-      MYSQL_ROOT_PASSWORD: secretpassword #FIXME
-      MYSQL_DATABASE: secretstring #FIXME
-      MYSQL_USER: secretstring #FIXME
-      MYSQL_PASSWORD: secretpassword #FIXME
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
 
   omekas:
+    build: .
     depends_on:
       - omekas_db
     image: giocomai/omeka-s-docker:v4.1.1
     container_name: omekas
     restart: unless-stopped
     environment:
-      MYSQL_USER: secretstring #FIXME
-      MYSQL_PASSWORD: secretpassword #FIXME
-      MYSQL_DATABASE: secretstring #FIXME
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_HOST: omekas_db
-      APPLICATION_ENV: production
-      OMEKA_THEMES: https://github.com/omeka-s-themes/default 
+      APPLICATION_ENV: development
+      OMEKA_THEMES:  |
+        https://github.com/omeka-s-themes/default
+        https://github.com/omeka-s-themes/freedom
+      OMEKA_MODULES: |
+        https://github.com/Daniel-KM/Omeka-S-module-Common/releases/download/3.4.72/Common-3.4.72.zip
+        https://github.com/omeka-s-modules/CSVImport/releases/download/v2.6.2/CSVImport-2.6.2.zip
+        https://github.com/omeka-s-modules/FileSideload/releases/download/v1.7.1/FileSideload-1.7.1.zip
+        https://github.com/omeka-s-modules/Hierarchy/releases/download/v1.1.2/Hierarchy-1.1.2.zip
+        https://github.com/smachefert/Omeka-S-module-IiifSearch/archive/refs/tags/v3.4.7.zip
+        https://github.com/Daniel-KM/Omeka-S-module-IiifServer/releases/download/3.6.16/IiifServer-3.6.16.zip
+        https://github.com/Daniel-KM/Omeka-S-module-ImageServer/releases/download/3.6.17/ImageServer-3.6.17.zip
+        https://github.com/Daniel-KM/Omeka-S-module-UniversalViewer/releases/download/3.6.9/UniversalViewer-3.6.9.zip
       PHP_MEMORY_LIMIT: 512M
       PHP_UPLOAD_MAX_FILESIZE: 64M
       PHP_POST_MAX_SIZE: 64M
       PHP_MAX_EXECUTION_TIME: 300
-      OMEKA_ADMIN_EMAIL: admin@example.com #FIXME
-      OMEKA_ADMIN_NAME: "Site Administrator" #FIXME
-      OMEKA_ADMIN_PASSWORD: supersecret #FIXME
-      OMEKA_SITE_TITLE: "My Omeka Site" #FIXME
+      OMEKA_ADMIN_EMAIL: ${OMEKA_ADMIN_EMAIL}
+      OMEKA_ADMIN_NAME: ${OMEKA_ADMIN_NAME}
+      OMEKA_ADMIN_PASSWORD: ${OMEKA_ADMIN_PASSWORD}
+      OMEKA_SITE_TITLE: ${OMEKA_SITE_TITLE}
     networks:
       - network1
     links:
