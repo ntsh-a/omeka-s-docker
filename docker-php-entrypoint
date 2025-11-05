@@ -50,14 +50,14 @@ if [ -n "${MYSQL_USER:-}" ] || [ -n "${MYSQL_PASSWORD:-}" ] || [ -n "${MYSQL_DAT
     else
       echo ";log_path ="
     fi
-  } > /var/www/html/volume/config/database.ini
+  } > /var/www/html/config/database.ini
 else
   echo "No database environment variables set. Using existing database.ini if available."
 fi
 
 # Set permissions
-chmod 600 /var/www/html/volume/config/database.ini
-chown www-data:www-data /var/www/html/volume/config/database.ini
+chmod 600 /var/www/html/config/database.ini
+chown www-data:www-data /var/www/html/config/database.ini
 
 # Function to get download URL from GitHub repository URL
 get_github_zip_url() {
@@ -118,7 +118,7 @@ if [ -n "$OMEKA_THEMES" ]; then
         echo "Resolved theme URL: $resolved_url"
 
         THEME_NAME=$(basename "$resolved_url" .zip | sed 's/^theme-//')
-        THEME_DIR="/var/www/html/volume/themes/$THEME_NAME"
+        THEME_DIR="/var/www/html/themes/$THEME_NAME"
 
         if [ -d "$THEME_DIR" ]; then
             echo "Theme '$THEME_NAME' already exists. Skipping."
@@ -131,7 +131,7 @@ if [ -n "$OMEKA_THEMES" ]; then
             continue
         fi
 
-        unzip -oq "$TMPDIR/theme.zip" -d /var/www/html/volume/themes
+        unzip -oq "$TMPDIR/theme.zip" -d /var/www/html/themes
     done
     rm -rf "$TMPDIR"
 else
@@ -151,7 +151,7 @@ if [ -n "$OMEKA_MODULES" ]; then
         echo "Resolved module URL: $resolved_url"
 
         MODULE_NAME=$(basename "$resolved_url" .zip)
-        MODULE_DIR="/var/www/html/volume/modules/$MODULE_NAME"
+        MODULE_DIR="/var/www/html/modules/$MODULE_NAME"
 
         if [ -d "$MODULE_DIR" ]; then
             echo "Module '$MODULE_NAME' already exists. Skipping."
@@ -164,7 +164,7 @@ if [ -n "$OMEKA_MODULES" ]; then
             continue
         fi
 
-        unzip -oq "$TMPDIR/module.zip" -d /var/www/html/volume/modules
+        unzip -oq "$TMPDIR/module.zip" -d /var/www/html/modules
     done
 
     rm -rf "$TMPDIR"

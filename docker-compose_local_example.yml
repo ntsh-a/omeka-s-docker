@@ -1,5 +1,4 @@
 services:
-
   omekas_db:
     image: mysql:latest
     container_name: omekas_db
@@ -16,7 +15,8 @@ services:
     build: .
     depends_on:
       - omekas_db
-    image:  giocomai/omeka-s-docker:v4.1.1
+    # image:  giocomai/omeka-s-docker:v4.1.1
+    image: ntsha-omeka-s-docker
     container_name: omekas
     ports:
       - "8000:80"
@@ -31,10 +31,10 @@ services:
         https://github.com/omeka-s-themes/default
         https://github.com/omeka-s-themes/freedom
       OMEKA_MODULES: |
-        https://github.com/Daniel-KM/Omeka-S-module-Common/releases/download/3.4.72/Common-3.4.72.zip
-        https://github.com/omeka-s-modules/CSVImport/releases/download/v2.6.2/CSVImport-2.6.2.zip
-        https://github.com/omeka-s-modules/FileSideload/releases/download/v1.7.1/FileSideload-1.7.1.zip
-        https://github.com/omeka-s-modules/Hierarchy/releases/download/v1.1.2/Hierarchy-1.1.2.zip
+        https://github.com/Daniel-KM/Omeka-S-module-Common
+        https://github.com/omeka-s-modules/CSVImport
+        https://github.com/omeka-s-modules/FileSideload
+        https://github.com/omeka-s-modules/Hierarchy
         https://github.com/smachefert/Omeka-S-module-IiifSearch/archive/refs/tags/v3.4.7.zip
         https://github.com/Daniel-KM/Omeka-S-module-IiifServer/releases/download/3.6.16/IiifServer-3.6.16.zip
         https://github.com/Daniel-KM/Omeka-S-module-ImageServer/releases/download/3.6.17/ImageServer-3.6.17.zip
@@ -48,7 +48,13 @@ services:
       OMEKA_ADMIN_PASSWORD: ${OMEKA_ADMIN_PASSWORD}
       OMEKA_SITE_TITLE: ${OMEKA_SITE_TITLE}
     volumes:
-      - "./omekas:/var/www/html/volume:Z
+      - omekas:/var/www/html/volume
+      - ./omekas/config:/var/www/html/config
+      - ./omekas/files:/var/www/html/files
+      - ./omekas/themes:/var/www/html/themes
+      - ./omekas/modules:/var/www/html/modules
+      - ./omekas/logs:/var/www/html/logs
+      - ./omekas/sideload:/omeka-sideload
 
 volumes:
   omeka_db:
