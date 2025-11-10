@@ -1,8 +1,15 @@
 docker_compose_traefik
-config
+config/database.ini
+config/local.config.php
 modules
-omeka
+!modules/.keep
 themes
+!themes/.keep
 logs
+!logs/.keep
+files
+!files/.keep
+sideload
+!sideload/.keep
 .env
 .gitignore

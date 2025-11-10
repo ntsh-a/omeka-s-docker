@@ -73,16 +73,7 @@ RUN unzip -q /var/www/latest_omeka_s.zip -d /var/www/ \
 
 COPY ./imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
 
-# Create one volume for files, config, themes, modules and logs
-# RUN mkdir -p /var/www/html/volume/config/ && mkdir -p /var/www/html/volume/files/ && mkdir -p /var/www/html/volume/modules/ && mkdir -p /var/www/html/volume/themes/ && mkdir -p /var/www/html/volume/logs/
-
-
-COPY ./database.ini /var/www/html/config/
-COPY ./local.config.php /var/www/html/config/
-RUN chown -R www-data:www-data /var/www/html/ \
-&& chmod 600 /var/www/html/config/database.ini \
-&& chmod 600 /var/www/html/config/local.config.php \
-&& chmod 600 /var/www/html/.htaccess
+RUN chown -R www-data:www-data /var/www/html/ && chmod 600 /var/www/html/.htaccess
 
 VOLUME /var/www/html/volume/
 
