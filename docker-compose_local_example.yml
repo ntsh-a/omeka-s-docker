@@ -8,12 +8,15 @@ services:
       - "--certificatesresolvers.le.acme.email=archives@shevchenko.org"
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--log.filePath=/logs/traefik.log"
+      - "--log.level=WARN"
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./letsencrypt:/letsencrypt
+      - ./traefik:/logs
   
   omekas_db:
     image: mysql:latest
@@ -73,9 +76,9 @@ services:
       - ./omekas/sideload:/omeka-sideload
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.omeka.rule=Host(`digitalcollections.shevchenko.org`)"
-      - "traefik.http.routers.omeka.entrypoints=websecure"
-      - "traefik.http.routers.omeka.tls.certresolver=le"
+      - "traefik.http.routers.omekas.rule=Host(`digitalcollections.shevchenko.org`)"
+      - "traefik.http.routers.omekas.entrypoints=websecure"
+      - "traefik.http.routers.omekas.tls.certresolver=le"
 
 volumes:
   omeka_db:

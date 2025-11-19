@@ -13,3 +13,5 @@ omekas/sideload
 !omekas/sideload/.keep
 .env
 .gitignore
+letsencrypt
+traefik
